@@ -1,0 +1,12 @@
+<input
+  #inputElement
+  class="mobi-b2c-visually-hidden"
+  [checked]="value"
+  type="checkbox"
+  [disabled]="controlValueAccessorDisabled"/>
+<div class="slider round">
+  <span
+    [ngClass]="{ checked: value, disabled: controlValueAccessorDisabled }"
+  >
+  </span>
+</div>
