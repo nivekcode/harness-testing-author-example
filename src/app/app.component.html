@@ -1,1 +1,4 @@
-<awesome-switch></awesome-switch>
+<form [formGroup]="myAwesomeFormGroup">
+<awesome-switch formControlName="myAwesomeSwitch"></awesome-switch>
+</form>
+<button (click)="myAwesomeFormGroup.reset()">Reset</button>
