@@ -1,35 +1,46 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HarnessLoader} from "@angular/cdk/testing";
+import {TestbedHarnessEnvironment} from "@angular/cdk/testing/testbed";
+import {ReactiveFormsModule} from "@angular/forms";
+
+import {AwesomeSwitchComponent} from "./components/switch.component";
+import {AwesomeSwitchHarness} from "./harness/switch.harness";
+import {AwesomeButtonHarness} from "./harness/button.harness";
+import {AppComponent} from './app.component';
 
 describe('AppComponent', () => {
+
+  let loader: HarnessLoader;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        ReactiveFormsModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        AwesomeSwitchComponent
       ],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    loader = TestbedHarnessEnvironment.loader(fixture);
+  })
+
+  it('should reset the switch if we reset the form ', async () => {
+    const myAwesomeSwitch = await loader.getHarness(AwesomeSwitchHarness);
+    const myAwesomeButton = await loader.getHarness(AwesomeButtonHarness);
+
+    await myAwesomeSwitch.click();
+    expect(await myAwesomeSwitch.checked()).toBe(true);
+
+    await myAwesomeButton.click();
+    expect(await myAwesomeSwitch.checked()).toBe(false);
   });
 
-  it(`should have as title 'harness-testing-author-example'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('harness-testing-author-example');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('harness-testing-author-example app is running!');
-  });
 });
